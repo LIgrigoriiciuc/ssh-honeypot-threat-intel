@@ -1,5 +1,0 @@
-connection from 127.0.0.1, 49284 timestamp: 2026-07-15 01:27:50.841486
-[error] ssh error: Error reading SSH protocol banner
-connection from 127.0.0.1, 49286 timestamp: 2026-07-15 01:27:55.024317
-[error] ssh error: Error reading SSH protocol banner
-shutting down honeypot...
