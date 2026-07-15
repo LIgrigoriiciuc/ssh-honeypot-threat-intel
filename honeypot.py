@@ -8,6 +8,7 @@ import uuid
 import json
 import sys
 import logging
+server_key = None
 logging.getLogger("paramiko").setLevel(logging.CRITICAL)
 class SSHServer(paramiko.ServerInterface):
 	def __init__(self, client_addr: Tuple[str,int], session_id : uuid.UUID):
@@ -26,7 +27,8 @@ class SSHServer(paramiko.ServerInterface):
 def handle_connection(client_sock, client_addr, session_id, time):
 	try:
 		transport = paramiko.Transport(client_sock)
-		server_key = paramiko.RSAKey.from_private_key_file('server_key.pem')
+		if server_key is None:
+			server_key = paramiko.RSAKey.from_private_key_file('server_key.pem')
 		#server_key = paramiko.RSAKey.generate(4096)
 		#server_key.write_private_key_file("server_key.pem")
 		transport.add_server_key(server_key)
