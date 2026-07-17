@@ -66,7 +66,7 @@ nohup ./honeypot.py >> honeypot.json 2>&1 &
 ```
 `nohup`: causes the process to ignore SIGHUP (the signal sent to child processes when the parent shell/terminal closes). Without this, the process would die on logout.
 `&`: backgrounds the process, returns terminal control immediately.
-- `>> honeypot.json 2>&1`: append stdout to the log file, redirect stderr into the same stream.
+`>> honeypot.json 2>&1`: append stdout to the log file, redirect stderr into the same stream.
 Checking process state:
 ```
 jobs # shows Running/Done status if still in current session
@@ -82,5 +82,5 @@ Added line:
 ```
 0 * * * * cp /opt/honeypot/honeypot.json /opt/honeypot/backups/honeypot_$(date +\%Y\%m\%d_\%H).json
 ```
-- `0 * * * *`: cron time fields are minute, hour, day-of-month, month, day-of-week. `0 * * * *` = minute 0 of every hour = top of every hour.
-- `\%`: `%` is escaped with a backslash specifically inside crontab, where an unescaped `%` has special meaning (newline).
+`0 * * * *`: cron time fields are minute, hour, day-of-month, month, day-of-week. `0 * * * *` = minute 0 of every hour = top of every hour.
+`\%`: `%` is escaped with a backslash specifically inside crontab, where an unescaped `%` has special meaning (newline).
