@@ -104,6 +104,8 @@ Running as a background process
 nohup ./honeypot.py >> honeypot.json 2>&1 &
 ```
 
+(note: later added `-u` which tells python to run unbuffered and write json data as it comes)
+
 `nohup`: causes the process to ignore SIGHUP (the signal sent to child processes when the parent shell/terminal closes). Without this, the process would die on logout.
 
 `&`: backgrounds the process, returns terminal control immediately.
