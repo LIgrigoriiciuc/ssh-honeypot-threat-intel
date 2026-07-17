@@ -1,4 +1,4 @@
-# Deployment - Hetzner Cloud
+## Deployment - Hetzner Cloud
 Technical reference for the Hetzner VPS this honeypot runs on: key generation, connection commands, sshd configuration, file transfer, process management, and cron. 
 SSH key
 Generated a dedicated key instead of reusing an existing one, to keep this server's access isolated from other keys.
@@ -72,7 +72,7 @@ Checking process state:
 jobs # shows Running/Done status if still in current session
 tail -f honeypot.json # live log
 ```
-## Cron - hourly log snapshots
+Cron - hourly log snapshots
 ```
 mkdir -p /opt/honeypot/backups
 crontab -e
