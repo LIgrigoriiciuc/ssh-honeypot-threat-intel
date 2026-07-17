@@ -119,6 +119,8 @@ jobs # shows Running/Done status if still in current session
 tail -f honeypot.json # live log
 ```
 
+A process not showing in jobs is not evidence it stopped, since only lists processes that were started from the current shell session and are still tracked in that shell's job table, ps aux is the reliable check.
+
 Cron - hourly log snapshots
 
 ```
