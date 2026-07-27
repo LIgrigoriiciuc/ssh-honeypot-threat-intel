@@ -17,12 +17,12 @@ Rescue mode filesystem model
 Rescue boots its own minimal OS entirely in RAM. The real server's disk is not running, it's just a block device sitting there. Mounting `/dev/sda1` at `/mnt` makes the server's files visible as regular files under `/mnt/*`, but there are no running processes from the server, no active systemd, no bound sockets. `ss -tlnp` inside rescue shows the rescue system's state, not the server's. Only configuration is inspectable, not runtime.
 
 To make commands act as if running inside the real system (so paths, package manager, and eventual `systemctl` calls resolve correctly), bind-mount the pseudo-filesystems and chroot in:
-
+```
 mount --bind /dev /mnt/dev
 mount --bind /proc /mnt/proc
 mount --bind /sys /mnt/sys
 chroot /mnt /bin/bash
-
+```
 Inside the chroot, `/etc/ssh/sshd_config` refers to the server's config, not the rescue system's.
 
 /etc on Ubuntu already exists on the disk as real files. When you mount /dev/sda1 /mnt, /mnt/etc is automatically populated with your Ubuntu's /etc, because it's just files on the ext4 partition. Same for /home, /root, /opt, /var, /usr, /bin, etc. All of those are ordinary directories with ordinary files stored on disk. One mount makes them all appear.
@@ -42,12 +42,12 @@ mount --bind <dir> <path> -> make an existing directory appear at a second path 
 Bug 1: socket activation override was never actually written
 
 `sshd_config` on the server correctly had `Port 2222`. But `/etc/systemd/system/ssh.socket.d/` was empty, no override file existed. Meanwhile the base unit at `/lib/systemd/system/ssh.socket` still specified:
-
+```
 [Socket]
 ListenStream=0.0.0.0:22
 ListenStream=[::]:22
 BindIPv6Only=ipv6-only
-
+```
 
 So the socket was still listening on 22, not 2222. `Port` in `sshd_config` is not what binds the port under socket activation, `ssh.socket`'s `ListenStream=` directives are, and sshd_config is only consulted when sshd is invoked per-connection. Restarting `ssh.socket` without an override just re-binds it to the base unit's port.
 
@@ -56,17 +56,16 @@ The fix required creating `/etc/systemd/system/ssh.socket.d/override.conf`. Seco
 External SSH from WSL comes in over IPv4 (the address `167.233.89.21` is IPv4, and WSL2's default routing prefers v4). Nothing was listening for IPv4 -> RST -> `Connection refused` again, this time on 2222 instead of on the missing service.
 
 Working override:
-
+```
 [Socket]
 ListenStream=
 ListenStream=0.0.0.0:2222
 ListenStream=[::]:2222
-
+```
 then:
 
 ```
 systemctl daemon-reload
-
 systemctl restart ssh.socket
 ```
 
