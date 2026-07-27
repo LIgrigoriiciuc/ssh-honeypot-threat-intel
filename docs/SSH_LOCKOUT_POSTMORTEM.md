@@ -86,9 +86,9 @@ Third bug: VPN hanging the SSH handshake
 
 With the server side finally working, `ssh -vvv -p 2222` from WSL now progressed past TCP connect. Banner exchange succeeded (`Remote protocol version 2.0, remote software version OpenSSH_10.2p1 Ubuntu-2ubuntu3.5` — real OpenSSH, not the paramiko honeypot). `SSH2_MSG_KEXINIT` sent and received. Then it hung indefinitely at `expecting SSH2_MSG_KEX_ECDH_REPLY`.
 
-SSH's handshake starts with small messages (banner, KEXINIT - a few hundred bytes) and then sends a much larger one (the key exchange reply, ~1KB+ with the negotiated post-quantum KEX). The small ones fit through the VPN tunnel fine. The large one doesn't: the VPN's own overhead shrinks the effective packet size limit below what SSH is trying to send, and the oversized packet gets silently dropped somewhere on the path with no error returned to either side. Client waits forever for a reply that will never arrive. Server thinks it already sent it.
+SSH's handshake starts with small messages (banner, KEXINIT - a few hundred bytes) and then sends a much larger one (the key exchange reply, ~1KB+ with the negotiated post-quantum KEX). The small ones fit through the VPN tunnel fine. The large one doesn't: the VPN's own overhead shrinks the effective packet size limit below what SSH is trying to send, and the oversized packet gets silently dropped somewhere on the path with no error returned to either side.
 
-Diagnostic that identified this as a client-side issue: the same hang happened trying to SSH to a completely unrelated server from the same WSL session. Two independent servers can't both be broken the same way at the same moment - the shared factor was the client and its network path.
+Diagnostic that identified this as a client-side issue: the same hang happened trying to SSH to a completely unrelated server from the same WSL session. 
 
 Turning off the VPN made SSH work immediately.
 
