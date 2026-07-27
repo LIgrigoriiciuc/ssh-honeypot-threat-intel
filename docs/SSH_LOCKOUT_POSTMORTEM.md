@@ -76,8 +76,9 @@ Modern Ubuntu (22.10+): they switched to socket activation for sshd. Now sshd do
 
 This creates the split-config problem:
 
-> ssh.socket (the listener) needs to know what port to bind. That's ListenStream= in the socket unit.
-> sshd (the actual SSH server) still reads sshd_config for its own settings - auth methods, allowed users, ciphers, and a Port line that it uses internally for things like default binding fallback and some log messages.
+ssh.socket (the listener) needs to know what port to bind. That's ListenStream= in the socket unit.
+
+sshd (the actual SSH server) still reads sshd_config for its own settings - auth methods, allowed users, ciphers, and a Port line that it uses internally for things like default binding fallback and some log messages.
 
 Older Ubuntu: sshd is still a plain daemon and one config line does it.
 
