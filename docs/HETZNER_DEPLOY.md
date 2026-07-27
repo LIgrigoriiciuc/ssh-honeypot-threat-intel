@@ -104,6 +104,8 @@ Running as a background process
 nohup ./honeypot.py >> honeypot.json 2>&1 &
 ```
 
+(note: later added `-u` which tells python to run unbuffered and write json data as it comes)
+
 `nohup`: causes the process to ignore SIGHUP (the signal sent to child processes when the parent shell/terminal closes). Without this, the process would die on logout.
 
 `&`: backgrounds the process, returns terminal control immediately.
@@ -116,6 +118,8 @@ Checking process state:
 jobs # shows Running/Done status if still in current session
 tail -f honeypot.json # live log
 ```
+
+A process not showing in jobs is not evidence it stopped, since only lists processes that were started from the current shell session and are still tracked in that shell's job table, ps aux is the reliable check.
 
 Cron - hourly log snapshots
 
